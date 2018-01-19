@@ -1,7 +1,7 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
 
-   <h1>From the admin page it works</h1>
+   <h1>Admin</h1>
 
 @endsection
