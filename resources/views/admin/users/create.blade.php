@@ -4,7 +4,7 @@
 
 <h1>Create New Users</h1>
 
-{!! Form::open(['method'=>'POST', 'action'=>'AdminUsersController@store']) !!}
+{!! Form::open(['method'=>'POST', 'action'=>'AdminUsersController@store', 'files'=>true]) !!}
 
     <div class="form-group">
 
@@ -20,6 +20,11 @@
 
         {!! Form::label('password', 'Password:')!!}
         {!! Form::password('password',['class' => 'form-control'])!!}
+    </div>
+    <div class="form-group">
+
+        {!! Form::label('photo_id', 'User photo:')!!}
+        {!! Form::file('photo_id', null)!!}
     </div>
      <div class="form-group">
 
@@ -38,6 +43,9 @@
     </div>
 
 {!! Form::close()!!}
+
+@include('_partials.form-errors')
+
 
 
 @endsection
