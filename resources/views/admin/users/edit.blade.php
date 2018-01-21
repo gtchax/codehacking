@@ -8,11 +8,23 @@
 
     <img src="{{$user->photo ? $user->photo->file : 'http://placehold.it/400x400' }}" alt="" class="img-responsive img-rounded">
 
+    <div class="text-center" style="margin-top: 20px">
+        {!! Form::close()!!}
+        {!! Form::open(['method'=>'DELETE', 'action'=>['AdminUsersController@destroy', $user->id]]) !!}
+
+            <div class="form-group">
+                {!! Form::submit('Delete user',['class' => 'btn btn-danger'])!!}
+            </div>
+        
+
+        {!! Form::close()!!}
+    </div>
+
 </div>
 
 <div class="col-sm-9">
 
-    {!! Form::model($user, ['method'=>'PATCH', 'action'=>['AdminUsersController@edit', $user->id], 'files'=>true]) !!}
+    {!! Form::model($user, ['method'=>'PATCH', 'action'=>['AdminUsersController@update', $user->id], 'files'=>true]) !!}
 
         <div class="form-group">
 
@@ -37,7 +49,7 @@
         <div class="form-group">
 
             {!! Form::label('is_active', 'Status:')!!}
-            {!! Form::select('is_active',[1 => 'Active', 0 => 'Non Active'], 0, ['class' => 'form-control'])!!}
+            {!! Form::select('is_active',[1 => 'Active', 0 => 'Non Active'], null, ['class' => 'form-control'])!!}
         </div>
         <div class="form-group">
 
@@ -46,11 +58,11 @@
         </div>
         <div class="form-group">
 
-            {!! Form::submit('Create User', ['class'=> 'btn btn-success'])!!}
+            {!! Form::submit('Update User', ['class'=> 'btn btn-success'])!!}
 
         </div>
 
-    {!! Form::close()!!}
+   
 
 </div>
 
