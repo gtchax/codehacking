@@ -8,12 +8,12 @@
 
     <img src="{{$user->photo ? $user->photo->file : 'http://placehold.it/400x400' }}" alt="" class="img-responsive img-rounded">
 
-    <div class="text-center" style="margin-top: 20px">
+    <div style="margin-top: 20px">
         {!! Form::close()!!}
         {!! Form::open(['method'=>'DELETE', 'action'=>['AdminUsersController@destroy', $user->id]]) !!}
 
             <div class="form-group">
-                {!! Form::submit('Delete user',['class' => 'btn btn-danger'])!!}
+                {!! Form::submit('Delete user',['class' => 'btn btn-danger col-sm-12'])!!}
             </div>
         
 
@@ -58,7 +58,7 @@
         </div>
         <div class="form-group">
 
-            {!! Form::submit('Update User', ['class'=> 'btn btn-success'])!!}
+            {!! Form::submit('Update User', ['class'=> 'btn btn-success col-sm-6'])!!}
 
         </div>
 
