@@ -8,7 +8,7 @@ use App\Post;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\PostsCreateRequest;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Session;
 
 class AdminPostsController extends Controller
 {
@@ -20,8 +20,8 @@ class AdminPostsController extends Controller
     public function index()
     {
         //
-        $posts = Post::all();
-        return view('admin.posts.index', compact('posts', 'categories'));
+        $posts = Post::paginate(4);
+        return view('admin/posts/index', compact('posts', 'categories'));
     }
 
     /**
@@ -33,7 +33,7 @@ class AdminPostsController extends Controller
     {
         //
         $categories = Category::pluck('name', 'id')->all();
-        return view('admin.posts.create', compact('categories'));
+        return view('admin/posts/create', compact('categories'));
     }
 
     /**
@@ -61,7 +61,7 @@ class AdminPostsController extends Controller
 
         $user->posts()->create($input);
 
-        return redirect('admin.posts.index');
+        return redirect('admin/posts');
 
 
   
@@ -87,6 +87,9 @@ class AdminPostsController extends Controller
     public function edit($id)
     {
         //
+        $post = Post::findOrFail($id);
+        $categories = Category::pluck('name', 'id')->all();
+        return view('admin/posts/edit', compact('post', 'categories'));
     }
 
     /**
@@ -99,6 +102,21 @@ class AdminPostsController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $input = $request->all();
+        if($file = $request->file('photo_id')){
+
+             $name = time() . $file->getClientOriginalName();
+
+            $file->move('images', $name);
+
+            $photo = Photo::create(['file' => $name]);
+
+            $input['photo_id'] = $photo->id;
+        }
+
+        Auth::user()->posts()->whereId($id)->first()->update($input);
+
+        return redirect('admin/posts');
     }
 
     /**
@@ -110,5 +128,22 @@ class AdminPostsController extends Controller
     public function destroy($id)
     {
         //
+        $post = Post::findOrFail($id);
+        unlink(public_path() . $post->photo->file);
+        $post->delete();
+    
+        Session::flash('deleted_post', 'The post as been deleted');
+
+        return redirect('admin/posts');
+    }
+
+    public function post($slug) {
+
+        $post = Post::whereSlug($slug)->firstOrFail();
+       
+        $comments = $post->comments;
+       
+
+        return view('post', compact('post', 'comments'));
     }
 }
